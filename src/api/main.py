@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
 import models
@@ -29,6 +29,21 @@ def get_db():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/api/1/passenger/{passenger_id}")
+def get_passenger(passenger_id: int, db: Session = Depends(get_db)):
+    passenger = db.query(models.Passenger).filter(models.Passenger.id == passenger_id).first()
+    if passenger is None:
+        raise HTTPException(status_code=404, detail="Passenger not found")
+    return {
+        "id": passenger.id,
+        "name": passenger.name,
+        "age": passenger.age,
+        "sex": passenger.sex,
+        "class": passenger.pclass,
+        "survived": passenger.survived,
+    }
 
 
 @app.get("/api/1/passenger")

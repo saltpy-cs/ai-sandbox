@@ -16,6 +16,25 @@ def step_send_api_request(context, url):
     context.response = requests.get(url, timeout=10)
 
 
+@then("I get the information about the passenger with id {passenger_id:d}")
+def step_check_single_passenger(context, passenger_id):
+    assert context.response.status_code == 200, (
+        f"Expected 200, got {context.response.status_code}"
+    )
+    passenger = context.response.json()
+    assert isinstance(passenger, dict), f"Expected a dict, got {type(passenger)}"
+    assert passenger["id"] == passenger_id
+    for field in ("name", "age", "sex", "class", "survived"):
+        assert field in passenger, f"Missing field: {field}"
+
+
+@then("I get a 404 response")
+def step_check_404(context):
+    assert context.response.status_code == 404, (
+        f"Expected 404, got {context.response.status_code}"
+    )
+
+
 @then("I get a list of the {count:d} passengers on the titanic when it sank")
 def step_check_passenger_count(context, count):
     assert context.response.status_code == 200, (

@@ -6,13 +6,13 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: titanic
-      POSTGRES_USER: titanic
-      POSTGRES_PASSWORD: titanic
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - prv
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U titanic"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,7 +22,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      DATABASE_URL: postgresql://titanic:titanic@db:5432/titanic
+      DATABASE_URL: ${DATABASE_URL}
     networks:
       - prv
     depends_on:

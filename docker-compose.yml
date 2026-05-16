@@ -1,0 +1,42 @@
+networks:
+  prv:
+  pub:
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: titanic
+      POSTGRES_USER: titanic
+      POSTGRES_PASSWORD: titanic
+    networks:
+      - prv
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U titanic"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./src/api
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://titanic:titanic@db:5432/titanic
+    networks:
+      - prv
+    depends_on:
+      db:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - prv
+      - pub
+    depends_on:
+      - api

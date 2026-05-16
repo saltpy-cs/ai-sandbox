@@ -18,10 +18,14 @@ An example repo for high quality SDLC with maximum use of AI coding agents.
 
 ### Design
 Read docs/architecture to get a set of constraints for the design
-Take a ticket from docs/backlog and produce an iteration on docs/design including visual and technical designs
+Read a ticket from docs/backlog
+Write a set of behaviours in docs/spec/<ticket>
 
 ### Specify
 Take a ticket from docs/backlog and produce additional behavioural scenarios in docs/spec
+
+### Task
+Make tasks from ticket
 
 ### Branch
 Make an iteration branch in git named for the ticket eg. iteration/00001-Greeting

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+HERE=$(dirname "$(realpath "$0")")
+
+echo "Cleaning up old skills in $HERE/.claude/skills"
+rm -rf "$HERE/.claude/skills"
+
+echo "Installing skills from $HERE/skills to $HERE/.claude/skills"
+test -d "$HERE/.claude/skills" || mkdir -p "$HERE/.claude/skills"
+
+for file in $(find ./skills -type f -name "SKILL.md"); do
+    echo "Processing $file"
+    mkdir -p $HERE/.claude/skills/implement
+    cp "$file" $HERE/.claude/skills/implement/
+    echo "Skill $(dirname "$file") installed"
+done

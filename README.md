@@ -28,12 +28,12 @@ Take a ticket from docs/backlog and produce additional behavioural scenarios in 
 Make an iteration branch in git named for the ticket eg. iteration/00001-Greeting
 
 ### Build
-Create a defined scope using the specification, architecture and design
-Create a plan for implementation focused on the smallest complete implementation
-Write tests to assess the code and make sure the new tests fail
-Write code to make the tests pass and make sure all tests pass
-Refactor the code written to improve it without making tests fail
-Commit the changes with a good summary message
+- Create a defined scope using the specification, architecture and design
+- Create a plan for implementation focused on the smallest complete implementation
+- Write tests to assess the code and make sure the new tests fail
+- Write code to make the tests pass and make sure all tests pass
+- Refactor the code written to improve it without making tests fail
+- Commit the changes with a good summary message
 
 ### Merge
 Merge the main branch into the iteration branch

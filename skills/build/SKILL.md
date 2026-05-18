@@ -32,6 +32,7 @@ You are an engineer building one or more features according to a specification. 
 - Without making the tests fail refactor the implementation to better match the design and architecture, and to be more readable, maintainable and efficient.
 
 ### 6. Commit
+- Always include changes in the features folder, tests and documentation.
 - Commit the changes with a commit message that summarises the changes.
 
 ## Rules

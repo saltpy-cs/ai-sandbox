@@ -9,8 +9,9 @@ echo "Installing skills from $HERE/skills to $HERE/.claude/skills"
 test -d "$HERE/.claude/skills" || mkdir -p "$HERE/.claude/skills"
 
 for file in $(find ./skills -type f -name "SKILL.md"); do
-    echo "Processing $file"
-    mkdir -p $HERE/.claude/skills/implement
-    cp "$file" $HERE/.claude/skills/implement/
-    echo "Skill $(dirname "$file") installed"
+    skill=$(basename "$(dirname "$file")")
+    echo "Processing $skill from $file"
+    mkdir -p $HERE/.claude/skills/$skill
+    cp "$file" $HERE/.claude/skills/$skill/
+    echo "Skill $skill installed"
 done

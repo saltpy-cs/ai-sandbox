@@ -26,3 +26,21 @@ Feature: View People
         Given the titanic API is running on localhost:5000
         When I send an API request to http://localhost:5000/api/1/passenger with the query sex=male
         Then I get the information for all male passengers
+
+    @AIS-4
+    Scenario: Search passenger by survived
+        Given the titanic API is running
+        When I send an API request to the passenger endpoint with the query survived=true
+        Then I get the information for all surviving passengers
+
+    @AIS-5
+    Scenario: Search passenger by age
+        Given the titanic API is running
+        When I send an API request to the passenger endpoint with the query minAge=0,maxAge=18
+        Then I get the information for all child passengers
+
+    @AIS-6
+    Scenario: Search passenger by multiple fields
+        Given the titanic API is running
+        When I send an API request to the passenger endpoint with the query survived=false,sex=female
+        Then I get the information for all female passengers who died on the titanic

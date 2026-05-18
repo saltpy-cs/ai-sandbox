@@ -61,9 +61,9 @@ def step_api_is_running_generic(context):
 
 @when("I send an API request to the passenger endpoint with the query {query}")
 def step_send_api_request_passenger_with_query(context, query):
-    key, value = query.split("=", 1)
+    params = dict(pair.split("=", 1) for pair in query.split(","))
     url = f"{context.base_url}/api/1/passenger"
-    context.response = requests.get(url, params={key: value}, timeout=10)
+    context.response = requests.get(url, params=params, timeout=10)
 
 
 @then("I get the information for all surviving passengers")
@@ -76,6 +76,19 @@ def step_check_surviving_passengers(context):
     assert len(passengers) > 0, "Expected at least one surviving passenger"
     for p in passengers:
         assert p["survived"] is True, f"Expected survived=True, got {p['survived']} for passenger {p['id']}"
+
+
+@then("I get the information for all child passengers")
+def step_check_child_passengers(context):
+    assert context.response.status_code == 200, (
+        f"Expected 200, got {context.response.status_code}"
+    )
+    passengers = context.response.json()
+    assert isinstance(passengers, list), f"Expected a list, got {type(passengers)}"
+    assert len(passengers) > 0, "Expected at least one child passenger"
+    for p in passengers:
+        assert p["age"] is not None, f"Passenger {p['id']} has no age"
+        assert 0 <= p["age"] <= 18, f"Expected age between 0 and 18, got {p['age']} for passenger {p['id']}"
 
 
 @then("I get the information for all male passengers")

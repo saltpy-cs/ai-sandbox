@@ -48,10 +48,12 @@ def get_passenger(passenger_id: int, db: Session = Depends(get_db)):
 
 
 @app.get("/api/1/passenger")
-def list_passengers(sex: Optional[str] = None, db: Session = Depends(get_db)):
+def list_passengers(sex: Optional[str] = None, survived: Optional[bool] = None, db: Session = Depends(get_db)):
     query = db.query(models.Passenger)
     if sex is not None:
         query = query.filter(models.Passenger.sex == sex)
+    if survived is not None:
+        query = query.filter(models.Passenger.survived == survived)
     passengers = query.all()
     return [
         {

@@ -50,6 +50,34 @@ def step_check_404(context):
     )
 
 
+@given("the titanic API is running")
+def step_api_is_running_generic(context):
+    try:
+        response = requests.get(f"{context.base_url}/health", timeout=5)
+        assert response.status_code == 200, f"API health check failed: {response.status_code}"
+    except requests.exceptions.ConnectionError:
+        raise AssertionError(f"Titanic API is not running at {context.base_url}")
+
+
+@when("I send an API request to the passenger endpoint with the query {query}")
+def step_send_api_request_passenger_with_query(context, query):
+    key, value = query.split("=", 1)
+    url = f"{context.base_url}/api/1/passenger"
+    context.response = requests.get(url, params={key: value}, timeout=10)
+
+
+@then("I get the information for all surviving passengers")
+def step_check_surviving_passengers(context):
+    assert context.response.status_code == 200, (
+        f"Expected 200, got {context.response.status_code}"
+    )
+    passengers = context.response.json()
+    assert isinstance(passengers, list), f"Expected a list, got {type(passengers)}"
+    assert len(passengers) > 0, "Expected at least one surviving passenger"
+    for p in passengers:
+        assert p["survived"] is True, f"Expected survived=True, got {p['survived']} for passenger {p['id']}"
+
+
 @then("I get the information for all male passengers")
 def step_check_male_passengers(context):
     assert context.response.status_code == 200, (

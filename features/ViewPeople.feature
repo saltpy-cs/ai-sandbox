@@ -44,3 +44,9 @@ Feature: View People
         Given the titanic API is running
         When I send an API request to the passenger endpoint with the query survived=false,sex=female
         Then I get the information for all female passengers who died on the titanic
+
+    @AIS-7
+    Scenario: Create a passenger via the API
+        Given the titanic API is running
+        When I send an API request to the passenger endpoint to create a new passenger with sample data
+        Then my new passenger is present in the list of all passengers

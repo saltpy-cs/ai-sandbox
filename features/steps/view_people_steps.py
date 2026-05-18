@@ -126,3 +126,31 @@ def step_check_passenger_count(context, count):
     assert len(passengers) == count, (
         f"Expected {count} passengers, got {len(passengers)}"
     )
+
+
+@when("I send an API request to the passenger endpoint to create a new passenger with sample data")
+def step_create_passenger(context):
+    url = f"{context.base_url}/api/1/passenger"
+    context.new_passenger_data = {
+        "name": "Test Passenger",
+        "age": 25.0,
+        "sex": "male",
+        "pclass": 3,
+        "survived": False,
+    }
+    context.response = requests.post(url, json=context.new_passenger_data, timeout=10)
+
+
+@then("my new passenger is present in the list of all passengers")
+def step_new_passenger_in_list(context):
+    assert context.response.status_code == 201, (
+        f"Expected 201, got {context.response.status_code}"
+    )
+    created = context.response.json()
+    assert "id" in created, "Created passenger should have an id"
+
+    list_response = requests.get(f"{context.base_url}/api/1/passenger", timeout=10)
+    assert list_response.status_code == 200
+    passengers = list_response.json()
+    ids = [p["id"] for p in passengers]
+    assert created["id"] in ids, f"New passenger id {created['id']} not found in list"

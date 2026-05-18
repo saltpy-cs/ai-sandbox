@@ -2,6 +2,8 @@ import csv
 import io
 import urllib.request
 
+from sqlalchemy import text
+
 from database import SessionLocal
 from models import Passenger
 
@@ -34,6 +36,8 @@ def seed_database():
         ]
 
         db.bulk_save_objects(passengers)
+        db.commit()
+        db.execute(text("SELECT setval('passengers_id_seq', (SELECT MAX(id) FROM passengers))"))
         db.commit()
         print(f"Seeded {len(passengers)} passengers.")
     finally:

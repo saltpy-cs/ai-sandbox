@@ -1,5 +1,14 @@
+import parse
 import requests
-from behave import given, when, then
+from behave import given, register_type, when, then
+
+
+@parse.with_pattern(r"https?://\S+")
+def parse_url(text):
+    return text
+
+
+register_type(URL=parse_url)
 
 
 @given("the titanic API is running on localhost:5000")
@@ -11,9 +20,15 @@ def step_api_is_running(context):
         raise AssertionError("Titanic API is not running on localhost:5000")
 
 
-@when("I send an API request to {url}")
+@when("I send an API request to {url:URL}")
 def step_send_api_request(context, url):
     context.response = requests.get(url, timeout=10)
+
+
+@when("I send an API request to {url:URL} with the query {query}")
+def step_send_api_request_with_query(context, url, query):
+    key, value = query.split("=", 1)
+    context.response = requests.get(url, params={key: value}, timeout=10)
 
 
 @then("I get the information about the passenger with id {passenger_id:d}")
@@ -33,6 +48,18 @@ def step_check_404(context):
     assert context.response.status_code == 404, (
         f"Expected 404, got {context.response.status_code}"
     )
+
+
+@then("I get the information for all male passengers")
+def step_check_male_passengers(context):
+    assert context.response.status_code == 200, (
+        f"Expected 200, got {context.response.status_code}"
+    )
+    passengers = context.response.json()
+    assert isinstance(passengers, list), f"Expected a list, got {type(passengers)}"
+    assert len(passengers) > 0, "Expected at least one male passenger"
+    for p in passengers:
+        assert p["sex"] == "male", f"Expected sex=male, got {p['sex']} for passenger {p['id']}"
 
 
 @then("I get a list of the {count:d} passengers on the titanic when it sank")

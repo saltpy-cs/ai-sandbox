@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from typing import Optional
 
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
@@ -47,8 +48,11 @@ def get_passenger(passenger_id: int, db: Session = Depends(get_db)):
 
 
 @app.get("/api/1/passenger")
-def list_passengers(db: Session = Depends(get_db)):
-    passengers = db.query(models.Passenger).all()
+def list_passengers(sex: Optional[str] = None, db: Session = Depends(get_db)):
+    query = db.query(models.Passenger)
+    if sex is not None:
+        query = query.filter(models.Passenger.sex == sex)
+    passengers = query.all()
     return [
         {
             "id": p.id,

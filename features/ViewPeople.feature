@@ -20,3 +20,9 @@ Feature: View People
         Given the titanic API is running on localhost:5000
         When I send an API request to http://localhost:5000/api/1/passenger/99999
         Then I get a 404 response
+
+    @AIS-3
+    Scenario: Search passenger by sex
+        Given the titanic API is running on localhost:5000
+        When I send an API request to http://localhost:5000/api/1/passenger with the query sex=male
+        Then I get the information for all male passengers

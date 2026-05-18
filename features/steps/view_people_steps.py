@@ -103,6 +103,19 @@ def step_check_male_passengers(context):
         assert p["sex"] == "male", f"Expected sex=male, got {p['sex']} for passenger {p['id']}"
 
 
+@then("I get the information for all female passengers who died on the titanic")
+def step_check_female_dead_passengers(context):
+    assert context.response.status_code == 200, (
+        f"Expected 200, got {context.response.status_code}"
+    )
+    passengers = context.response.json()
+    assert isinstance(passengers, list), f"Expected a list, got {type(passengers)}"
+    assert len(passengers) > 0, "Expected at least one matching passenger"
+    for p in passengers:
+        assert p["sex"] == "female", f"Expected sex=female, got {p['sex']} for passenger {p['id']}"
+        assert p["survived"] is False, f"Expected survived=False, got {p['survived']} for passenger {p['id']}"
+
+
 @then("I get a list of the {count:d} passengers on the titanic when it sank")
 def step_check_passenger_count(context, count):
     assert context.response.status_code == 200, (

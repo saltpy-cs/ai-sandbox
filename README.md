@@ -30,15 +30,13 @@ Make tasks from ticket
 ### Branch
 Make an iteration branch in git named for the ticket eg. iteration/00001-Greeting
 
-### Implement
-Create a test in test from a behavioural scenario and connect it to the scenario
-Run all the tests and make sure only the new tests fail
-Create code in src that meets the specification 
-Run all the tests and make sure they all pass without changing them
-Alter the implementation of the specification to better meet the design and architecture
-Ensure all the tests pass without changing them
-Create a commit message that summarises the changes according to the template at docs/commit_message
-Add a git commit that describes the changes that have been made
+### Build
+Create a defined scope using the specification, architecture and design
+Create a plan for implementation focused on the smallest complete implementation
+Write tests to assess the code and make sure the new tests fail
+Write code to make the tests pass and make sure all tests pass
+Refactor the code written to improve it without making tests fail
+Commit the changes with a good summary message
 
 ### Merge
 Merge the main branch into the iteration branch
